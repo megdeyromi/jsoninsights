@@ -72,7 +72,8 @@ def handler(ctx, data: io.BytesIO=None):
         )
 
         # Extract insights from OpenAI response
-        insights = response.choices[0].text.strip()
+        #insights = response.choices[0].text.strip()
+        insights = decoded_text_base64
                             
 
     except (Exception, ValueError) as ex:
