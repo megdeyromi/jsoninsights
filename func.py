@@ -65,8 +65,8 @@ def handler(ctx, data: io.BytesIO=None):
                             api_version="2024-02-15-preview",
                             )
         prompt = f"Provide answers based on the following data and query:\n\nQuery: {query}\n\n{decoded_text_base64}\n\nInsights:"
-        response = client.completions.create(    model="gpt-35-turbo",    prompt=prompt,    max_tokens=150,     temperature=0.8,  )
-        print(response)
+        #response = client.completions.create(    model="gpt-35-turbo",    prompt=prompt,    max_tokens=150,     temperature=0.8,  )
+        print(prompt)
         # Extract insights from OpenAI response
         #insights = response.choices[0].text.strip()
         insights = decoded_text_base64
@@ -80,7 +80,7 @@ def handler(ctx, data: io.BytesIO=None):
 
     #print("Value of name = ", name, flush=True)
     # Prepare the response data
-    response_data = { "insights": insights  }
+    response_data = { "insights": prompt  }
     print("Exiting Python Hello World handler", flush=True)
     return response.Response(
         ctx, response_data=json.dumps(response_data),
