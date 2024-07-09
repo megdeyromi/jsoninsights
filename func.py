@@ -86,6 +86,8 @@ def handler(ctx, data: io.BytesIO=None):
             presence_penalty=0,
             stop=None,
         )
+        # Extract the response content
+        response_content = completion.choices[0].message.content
 
         #insights = response.choices[0].text.strip()
         insights = decoded_text_base64
