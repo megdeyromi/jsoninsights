@@ -68,6 +68,25 @@ def handler(ctx, data: io.BytesIO=None):
         #response = client.completions.create(    model="gpt-35-turbo",    prompt=prompt,    max_tokens=150,     temperature=0.8,  )
         print(prompt)
         # Extract insights from OpenAI response
+        message_text = [
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ]
+
+        # Generate completion
+        completion = client.chat.completions.create(
+            model="gpt-35-turbo",
+            messages=message_text,
+            temperature=0.7,
+            max_tokens=800,
+            top_p=0.95,
+            frequency_penalty=0,
+            presence_penalty=0,
+            stop=None,
+        )
+
         #insights = response.choices[0].text.strip()
         insights = decoded_text_base64
                             
