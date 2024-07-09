@@ -8,6 +8,7 @@
 import io
 import json
 import base64
+from openai import AzureOpenAI
 
 from fdk import response
 
@@ -40,24 +41,40 @@ def process_name(name: str) -> str:
 
 def handler(ctx, data: io.BytesIO=None):
     print("Entering Python Hello World handler", flush=True)
-    name = "World"
+    api_url = "https"
+    body = {}  # Initialize body with an empty dictionary
+    query = ""
+    json_data_encoded = ""
+    decoded_text_base64 = ""
     try:
+        # Read the incoming JSON data
         body = json.loads(data.getvalue())
-        encoded_name = body.get("name")
+        
+        # Extract query and json_data from the input JSON
+        query = body.get("query", "")
+        json_data_encoded = body.get("json_data", "")
+        body = json.loads(data.getvalue())
+        #encoded_name = body.get("name")
         encoding_type = body.get("encoding_type", "base64")  # Default to 'base64' if not provided
 
         # Convert the encoded name to plain text
-        name = convert_to_text(encoded_name, encoding_type)
+        decoded_text_base64 = convert_to_text(json_data_encoded, encoding_type)
+        client = AzureOpenAI( azure_endpoint="https://jaguksouth6726803320.openai.azure.com/", 
+                              api_key="efa992652f52414cb5934735efa47288",
+                            api_version="2024-02-15-preview",
+                            )
+
     except (Exception, ValueError) as ex:
         print(str(ex), flush=True)
 
     # Process the name using the new function
-    name = process_name(name)
+    #name = process_name(name)
 
-    print("Value of name = ", name, flush=True)
+    #print("Value of name = ", name, flush=True)
+    # Prepare the response data
+    response_data = { "insights": decoded_text_base64   }
     print("Exiting Python Hello World handler", flush=True)
     return response.Response(
-        ctx, response_data=json.dumps(
-            {"message": "Hello {0}".format(name)}),
+        ctx, response_data=json.dumps(response_data),
         headers={"Content-Type": "application/json"}
     )
