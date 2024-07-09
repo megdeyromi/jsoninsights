@@ -101,7 +101,7 @@ def handler(ctx, data: io.BytesIO=None):
             headers={"Content-Type": "application/json"}
         )
 
-   except (Exception, ValueError) as ex:
+    except (Exception, ValueError) as ex:
         error_message = f"Error processing request: {str(ex)}"
         print(error_message, flush=True)
         return response.Response(
