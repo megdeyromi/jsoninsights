@@ -89,21 +89,27 @@ def handler(ctx, data: io.BytesIO=None):
         # Extract the response content
         response_content = completion.choices[0].message.content
 
-        #insights = response.choices[0].text.strip()
-        insights = decoded_text_base64
-                            
+        # Prepare the response data
+        response_data = {
+            "insights": response_content
+        }
+        print("Exiting Python handler", flush=True)
 
-    except (Exception, ValueError) as ex:
-        print(str(ex), flush=True)
+        return response.Response(
+            ctx,
+            response_data=json.dumps(response_data),
+            headers={"Content-Type": "application/json"}
+        )
 
-    # Process the name using the new function
-    #name = process_name(name)
+   except (Exception, ValueError) as ex:
+        error_message = f"Error processing request: {str(ex)}"
+        print(error_message, flush=True)
+        return response.Response(
+            ctx,
+            response_data=json.dumps({"error": error_message}),
+            headers={"Content-Type": "application/json"},
+            status_code=500  # Internal Server Error
+        )
 
-    #print("Value of name = ", name, flush=True)
-    # Prepare the response data
-    response_data = { "insights": prompt  }
-    print("Exiting Python Hello World handler", flush=True)
-    return response.Response(
-        ctx, response_data=json.dumps(response_data),
-        headers={"Content-Type": "application/json"}
-    )
+    finally:
+        print("Exiting Python handler", flush=True)
