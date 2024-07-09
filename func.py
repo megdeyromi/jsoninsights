@@ -59,17 +59,12 @@ def handler(ctx, data: io.BytesIO=None):
 
         # Convert the encoded name to plain text
         decoded_text_base64 = convert_to_text(json_data_encoded, encoding_type)
-        prompt = f"Provide answers based on the following data and query:\n\nQuery: {query}\n\n{decoded_text_base64}\n\nInsights:"
+        #prompt = f"Provide answers based on the following data and query:\n\nQuery: {query}\n\n{decoded_text_base64}\n\nInsights:"
         client = AzureOpenAI( azure_endpoint="https://jaguksouth6726803320.openai.azure.com/", 
                               api_key="efa992652f52414cb5934735efa47288",
                             api_version="2024-02-15-preview",
                             )
-        response = client.completions.create(
-            model="gpt-35-turbo",
-            prompt=prompt,
-            max_tokens=150,  # Adjust based on how detailed you want the insights to be
-            temperature=0.8  # Adjust temperature for creativity vs. precision
-        )
+       
 
         # Extract insights from OpenAI response
         #insights = response.choices[0].text.strip()
